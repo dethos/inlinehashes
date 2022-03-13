@@ -1,10 +1,11 @@
 [tool.poetry]
 name = "inlinehashes"
-version = "0.0.1"
+version = "0.0.2"
 description = "Hash generator for HTML inline styles and scripts"
 authors = ["Gonçalo Valério <gon@ovalerio.net>"]
 homepage = "https://github.com/dethos/inlinehashes"
 repository = "https://github.com/dethos/inlinehashes"
+readme = "README.rst"
 license = "MIT"
 classifiers = [
     "Development Status :: 3 - Alpha",
