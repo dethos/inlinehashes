@@ -29,7 +29,7 @@ black = "^22.1.0"
 mypy = "^0.940"
 
 [tool.poetry.scripts]
-cli = "inlinehashes.app:run_cli"
+inlinehashes = "inlinehashes.app:run_cli"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

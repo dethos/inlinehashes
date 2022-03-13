@@ -35,10 +35,17 @@ def run_cli() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("source", help="URL or local HTML file to check")
     parser.add_argument(
-        "-a", "--alg", help="Hash algorithm to use (default: sha256)", default="sha256"
+        "-a",
+        "--alg",
+        help="Hash algorithm to use (default: sha256)",
+        default="sha256",
+        choices=["sha256", "sha384", "sha512"],
     )
     parser.add_argument(
-        "-f", "--full", help="Include full content in the output", action="store_true"
+        "-f",
+        "--full",
+        help="Include full content in the output",
+        action="store_true",
     )
     parser.add_argument("-o", "--output", help="Store output in a file.")
     args = parser.parse_args()

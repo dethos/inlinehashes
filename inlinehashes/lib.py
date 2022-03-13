@@ -55,6 +55,12 @@ class Inline:
         h_b64 = base64.b64encode(h.digest()).decode("utf8")
         return f"sha512-{h_b64}"
 
+    def __repr__(self) -> str:
+        return f"Inline(content='{self.content}')"
+
+    def __str__(self) -> str:
+        return f"Inline(content='{self.short_content}...')"
+
 
 def parse(content: str, target: str = "all") -> List[Inline]:
     """Parses an HTML document and extracts."""
