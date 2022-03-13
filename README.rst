@@ -2,17 +2,17 @@ Inlinehashes
 ============
 
 A small tool and library to generate the hashes of inline content that needs to be whitelisted when serving an HTML document
-with a `Content-Security-Policy <https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP>`_ (as the name indicates,
-using ``unsafe-inline`` is not recommended.)
+with a `Content-Security-Policy <https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP>`_ (because, as the name indicates,
+using ``unsafe-inline`` is not recommended).
 
-You provide the HTML content (directly or through a file path or URL) then ``inlinehashes`` will parse the document and provide
+You provide the HTML content (directly or through a file path/URL) then ``inlinehashes`` will parse the document and provide
 you with a list of elements that need to be explicitly added to the CSP header/tag.
 
 The tool can be specially useful for scenarios where you use/include external software solutions in your website or application
-(such as a 3rd party CMS), since it will allow you to detect changes after updates and edit you CSP accordingly.
+(such as a 3rd party CMS, etc), since it will allow you to detect changes after updates and edit you CSP accordingly.
 
-*Quick note: Always verify the content you are whitelisting and be careful when fetching live website data, since any XSS
-code will be included in the results.*
+*Quick note: Always verify the content you are whitelisting and be careful when fetching live website data, since any existing
+XSS code will be included in the results.*
 
 **At the moment this package is still in a very early stage, so it still doesn't detect all possible items and the current API
 might change with future releases.**
@@ -83,7 +83,7 @@ Here is the same example, but using the python shell:
         html {
             height: 100%;
         }
-        ')]
+        ...')]
     >>> first = inlines[0]
     >>> first.short_content
     '\n      html {\n        height: 100%;\n      }\n      '
@@ -94,7 +94,7 @@ Here is the same example, but using the python shell:
     >>> first.sha512
     'sha512-cBO6RNy87Tx3HmpXRZUs/DPxGq9ZOqIZ9cCyDum0kNZeLEWVvW5DtYFRmHcQawnAoWeeRmll4aJeLXTb2OLBlA=='
     >>> first.content
-    '\n      html {\n        height: 100%;\n      }\n      body {\n        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANS..."
+    '\n      html {\n        height: 100%;\n      }\n      body {\n        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANS...'
 
 Contributions
 -------------
