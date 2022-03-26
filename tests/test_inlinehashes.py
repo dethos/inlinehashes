@@ -1,8 +1,8 @@
 import pytest
 
 
-from inlinehashes import __version__
-from inlinehashes.lib import Inline
+from inlinehashes import __version__, parse
+from inlinehashes.lib import Inline, _EVENT_HANDLER_ATTRS
 
 
 class TestInline:
@@ -105,22 +105,62 @@ class TestInline:
 
 
 class TestParse:
-    @pytest.mark.skip(reason="Add later")
     def test_parse_detects_script_tags(self):
-        pass
+        doc = """
+        <html>
+        <head><title>Some title</title></head>
+        <body>Some body
+        <script>alert("hash this");</script>
+        </body>
+        </html>
+        """
+        inlines = parse(doc)
+        assert len(inlines) == 1
+        assert inlines[0].content == 'alert("hash this");'
 
-    @pytest.mark.skip(reason="Add later")
     def test_parse_detects_style_tags(self):
-        pass
+        doc = """
+        <html>
+        <head>
+          <title>Some title</title>
+          <style>.someclass { background:#142a3f; }</style>
+        </head>
+        <body>Some body</body>
+        </html>
+        """
+        inlines = parse(doc)
+        assert len(inlines) == 1
+        assert inlines[0].content == ".someclass { background:#142a3f; }"
 
-    @pytest.mark.skip(reason="Not Implemented yet")
     def test_parse_detects_style_attributes(self):
-        pass
+        doc = """
+        <html>
+        <head>
+          <title>Some title</title>
+        </head>
+        <body style="text-color: #000;">Some body</body>
+        </html>
+        """
+        inlines = parse(doc)
+        assert len(inlines) == 1
+        assert inlines[0].content == "text-color: #000;"
 
-    @pytest.mark.skip(reason="Not Implemented yet")
-    def test_parse_detect_attributes_with_js(self):
-        pass
+    @pytest.mark.parametrize("attr", _EVENT_HANDLER_ATTRS)
+    def test_parse_detect_attributes_with_js(self, attr):
+        # Just to test they are detected even though some of them are
+        # not valid for all elements
+        doc = f"""
+        <html>
+        <head>
+          <title>Some title</title>
+        </head>
+        <body {attr}="alert(1);">Some body</body>
+        </html>
+        """
+        inlines = parse(doc)
+        assert len(inlines) == 1
+        assert inlines[0].content == "alert(1);"
 
 
 def test_version():
-    assert __version__ == "0.0.1"
+    assert __version__ == "0.0.2"
