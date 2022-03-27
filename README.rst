@@ -21,6 +21,8 @@ Inline content that is currently detected:
 
 * ``<script></script>`` tags
 * ``<style></style>`` tags
+* Many event handlers defined in element/tag attributes
+* Styles defined directly in the element/tag using the ``style`` attribute
 
 
 Installation
