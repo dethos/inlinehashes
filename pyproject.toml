@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "inlinehashes"
-version = "0.0.3"
+version = "0.0.4"
 description = "Hash generator for HTML inline styles and scripts"
 authors = ["Gonçalo Valério <gon@ovalerio.net>"]
 homepage = "https://github.com/dethos/inlinehashes"
@@ -22,7 +22,6 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.9"
 beautifulsoup4 = "^4.10.0"
-requests = "^2.27.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

@@ -29,6 +29,8 @@ class Inline:
     """
 
     content: str
+    line: Optional[int] = None
+    position: Optional[int] = None
 
     @cached_property
     def short_content(self) -> str:
@@ -53,7 +55,7 @@ class Inline:
         return f"sha512-{h_b64}"
 
     def __repr__(self) -> str:
-        return f"Inline(content='{self.content}')"
+        return f"Inline(content='{self.content}', line='{self.line}', postiion='{self.position}')"
 
     def __str__(self) -> str:
         return f"Inline(content='{self.short_content}...')"
@@ -205,10 +207,10 @@ def parse(content: str, target: str = "all") -> List[Inline]:
     for q in search_queries:
         for tag in soup.find_all(q.search_function):
             if q.attr_name:
-                inline = Inline(tag[q.attr_name])
+                inline = Inline(tag[q.attr_name], tag.sourceline, tag.sourcepos)
             else:
                 if not tag.contents:
                     continue
-                inline = Inline(tag.contents[0])
+                inline = Inline(tag.contents[0], tag.sourceline, tag.sourcepos)
             elements.append(inline)
     return elements

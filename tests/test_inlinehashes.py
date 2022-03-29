@@ -117,6 +117,8 @@ class TestParse:
         inlines = parse(doc)
         assert len(inlines) == 1
         assert inlines[0].content == 'alert("hash this");'
+        assert inlines[0].line == 5
+        assert inlines[0].position == 8
 
     def test_parse_detects_style_tags(self):
         doc = """
@@ -131,6 +133,8 @@ class TestParse:
         inlines = parse(doc)
         assert len(inlines) == 1
         assert inlines[0].content == ".someclass { background:#142a3f; }"
+        assert inlines[0].line == 5
+        assert inlines[0].position == 10
 
     def test_parse_detects_style_attributes(self):
         doc = """
@@ -144,6 +148,8 @@ class TestParse:
         inlines = parse(doc)
         assert len(inlines) == 1
         assert inlines[0].content == "text-color: #000;"
+        assert inlines[0].line == 6
+        assert inlines[0].position == 8
 
     @pytest.mark.parametrize("attr", _EVENT_HANDLER_ATTRS)
     def test_parse_detect_attributes_with_js(self, attr):
@@ -160,7 +166,54 @@ class TestParse:
         inlines = parse(doc)
         assert len(inlines) == 1
         assert inlines[0].content == "alert(1);"
+        assert inlines[0].line == 6
+        assert inlines[0].position == 8
+
+    def test_parse_both_targets(self):
+        doc = """
+        <html>
+        <head>
+          <title>Some title</title>
+          <style>.someclass { background:#142a3f; }</style>
+        </head>
+        <body onclick="alert(1);">Some body</body>
+        </html>
+        """
+        inlines = parse(doc)
+        assert len(inlines) == 2
+
+    def test_parse_only_script_targets(self):
+        doc = """
+        <html>
+        <head>
+          <title>Some title</title>
+          <style>.someclass { background:#142a3f; }</style>
+        </head>
+        <body onclick="alert(1);">Some body</body>
+        </html>
+        """
+        inlines = parse(doc, "scripts")
+        assert len(inlines) == 1
+        assert inlines[0].content == "alert(1);"
+        assert inlines[0].line == 7
+        assert inlines[0].position == 8
+
+    def test_parse_only_style_targets(self):
+        doc = """
+        <html>
+        <head>
+          <title>Some title</title>
+          <style>.someclass { background:#142a3f; }</style>
+        </head>
+        <body onclick="alert(1);">Some body</body>
+        </html>
+        """
+        inlines = parse(doc, "styles")
+        assert len(inlines) == 1
+        assert inlines[0].content == ".someclass { background:#142a3f; }"
+        assert inlines[0].line == 5
+        assert inlines[0].position == 10
 
 
 def test_version():
-    assert __version__ == "0.0.3"
+    assert __version__ == "0.0.4"
