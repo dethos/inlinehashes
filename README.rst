@@ -43,7 +43,7 @@ This is the available functionality:
 
 .. code::
 
-    usage: inlinehashes [-h] [-a {sha256,sha384,sha512}] [-f] [-o OUTPUT] source
+    usage: inlinehashes [-h] [-a {sha256,sha384,sha512}] [-f] [-t {all,scripts,styles}] source
 
     positional arguments:
     source                URL or local HTML file to check
@@ -53,8 +53,8 @@ This is the available functionality:
     -a {sha256,sha384,sha512}, --alg {sha256,sha384,sha512}
                             Hash algorithm to use (default: sha256)
     -f, --full            Include full content in the output
-    -o OUTPUT, --output OUTPUT
-                            Store output in a file.
+    -t {all,scripts,styles}, --target {all,scripts,styles}
+                            Target inline content to look for
 
 Here is an example of the output:
 
@@ -64,7 +64,9 @@ Here is an example of the output:
     [
       {
         "content": "\n      html {\n        height: 100%;\n      }\n      ",
-        "hash": "sha384-Ku20lQH5qbr4EDPzXD2rf25rEHJNswNYRUNMPjYl7jCe0eHJYDe0gFdQpnKkFUTv"
+        "hash": "sha384-Ku20lQH5qbr4EDPzXD2rf25rEHJNswNYRUNMPjYl7jCe0eHJYDe0gFdQpnKkFUTv",
+        "line": 12,
+        "position": 0
       }
     ]
 
