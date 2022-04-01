@@ -11,7 +11,7 @@ from itertools import chain
 import hashlib
 import base64
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag  # type: ignore
 
 
 @dataclass(frozen=True)
@@ -199,7 +199,7 @@ def parse(content: str, target: str = "all") -> List[Inline]:
     if target == "all":
         search_queries = chain(*_VALID_TARGETS.values())
     elif target in _VALID_TARGETS.keys():
-        search_queries = _VALID_TARGETS[target]
+        search_queries = chain(_VALID_TARGETS[target])
     else:
         raise ValueError("Invalid Target")
 
