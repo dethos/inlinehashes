@@ -74,7 +74,7 @@ Here is an example of the output:
 Library
 .......
 
-Here is the same example, but using the python shell:
+Here is the same example, but using python's shell:
 
 .. code:: python
 
