@@ -1,8 +1,7 @@
 import pytest
 
-
 from inlinehashes import __version__, parse
-from inlinehashes.lib import Inline, _EVENT_HANDLER_ATTRS
+from inlinehashes.lib import _EVENT_HANDLER_ATTRS, Inline
 
 
 class TestInline:

@@ -4,12 +4,13 @@ This file contains all the logic for the command line interface of
 this library. It makes use of the same tools available for those that
 install the package in order to be used programatically.
 """
-from typing import List
-from urllib.request import urlopen, Request
-from urllib.error import URLError
 import argparse
-import inlinehashes
 import json
+from typing import List
+from urllib.error import URLError
+from urllib.request import Request, urlopen
+
+import inlinehashes
 
 
 def build_output(

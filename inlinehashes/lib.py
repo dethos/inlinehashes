@@ -4,12 +4,12 @@ This small module helps you to parse HTML documents and extract all the inline
 content that must be specifically allowed in the Content-Security-Policy in
 order to work (assuming "unsafe-inline" is not present).
 """
-from typing import List, Callable, Optional
+import base64
+import hashlib
 from dataclasses import dataclass
 from functools import cached_property, partial
 from itertools import chain
-import hashlib
-import base64
+from typing import Callable, List, Optional
 
 from bs4 import BeautifulSoup, Tag  # type: ignore
 
@@ -55,7 +55,7 @@ class Inline:
         return f"sha512-{h_b64}"
 
     def __repr__(self) -> str:
-        return f"Inline(content='{self.content}', line='{self.line}', postiion='{self.position}')"
+        return f"Inline(line='{self.line}', position='{self.position}')"
 
     def __str__(self) -> str:
         return f"Inline(content='{self.short_content}...')"
