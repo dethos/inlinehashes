@@ -21,7 +21,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 beautifulsoup4 = "^4.10.0"
 
 [tool.poetry.dev-dependencies]
