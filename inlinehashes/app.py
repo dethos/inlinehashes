@@ -22,6 +22,7 @@ def build_output(
         {
             "content": getattr(i, snippet),
             "hash": getattr(i, alg),
+            "directive": i.directive,
             "line": i.line,
             "position": i.position,
         }
@@ -52,7 +53,7 @@ def run_cli() -> None:
         "--target",
         help="Target inline content to look for",
         default="all",
-        choices=["all", "scripts", "styles"],
+        choices=["all", "script-src", "style-src"],
     )
     args = parser.parse_args()
     path = args.source

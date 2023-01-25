@@ -65,6 +65,7 @@ Here is an example of the output:
       {
         "content": "\n      html {\n        height: 100%;\n      }\n      ",
         "hash": "sha384-Ku20lQH5qbr4EDPzXD2rf25rEHJNswNYRUNMPjYl7jCe0eHJYDe0gFdQpnKkFUTv",
+        "directive": "style-src",
         "line": 12,
         "position": 0
       }
@@ -83,11 +84,7 @@ Here is the same example, but using python's shell:
     >>> content = requests.get("https://ovalerio.net").text
     >>> inlines = inlinehashes.parse(content)
     >>> inlines
-    [Inline(content='
-        html {
-            height: 100%;
-        }
-        ...')]
+    [Inline(line='17', position='0')]
     >>> first = inlines[0]
     >>> first.short_content
     '\n      html {\n        height: 100%;\n      }\n      '

@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup, Tag  # type: ignore
 class SearchQuery:
     search_function: Callable
     attr_name: Optional[str]
+    directive: str
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,7 @@ class Inline:
     """
 
     content: str
+    directive: Optional[str] = None
     line: Optional[int] = None
     position: Optional[int] = None
 
@@ -58,7 +60,7 @@ class Inline:
         return f"Inline(line='{self.line}', position='{self.position}')"
 
     def __str__(self) -> str:
-        return f"Inline(content='{self.short_content}...')"
+        return self.content
 
 
 def matches_attribute(tag: Tag, attribute_name: str) -> bool:
@@ -178,16 +180,20 @@ _EVENT_HANDLER_ATTRS = [
 ]
 
 _VALID_TARGETS = {
-    "scripts": [
-        SearchQuery(partial(matches_name, name="script"), None),
+    "script-src": [
+        SearchQuery(partial(matches_name, name="script"), None, "script-src"),
         *[
-            SearchQuery(partial(matches_attribute, attribute_name=attr), attr)
+            SearchQuery(
+                partial(matches_attribute, attribute_name=attr), attr, "script-src"
+            )
             for attr in _EVENT_HANDLER_ATTRS
         ],
     ],
-    "styles": [
-        SearchQuery(partial(matches_name, name="style"), None),
-        SearchQuery(partial(matches_attribute, attribute_name="style"), "style"),
+    "style-src": [
+        SearchQuery(partial(matches_name, name="style"), None, "style-src"),
+        SearchQuery(
+            partial(matches_attribute, attribute_name="style"), "style", "style-src"
+        ),
     ],
 }
 
@@ -207,10 +213,20 @@ def parse(content: str, target: str = "all") -> List[Inline]:
     for q in search_queries:
         for tag in soup.find_all(q.search_function):
             if q.attr_name:
-                inline = Inline(tag[q.attr_name], tag.sourceline, tag.sourcepos)
+                inline = Inline(
+                    tag[q.attr_name],
+                    q.directive,
+                    tag.sourceline,
+                    tag.sourcepos,
+                )
             else:
                 if not tag.contents:
                     continue
-                inline = Inline(tag.contents[0], tag.sourceline, tag.sourcepos)
+                inline = Inline(
+                    tag.contents[0],
+                    q.directive,
+                    tag.sourceline,
+                    tag.sourcepos,
+                )
             elements.append(inline)
     return elements

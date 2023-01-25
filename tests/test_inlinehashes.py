@@ -191,11 +191,12 @@ class TestParse:
         <body onclick="alert(1);">Some body</body>
         </html>
         """
-        inlines = parse(doc, "scripts")
+        inlines = parse(doc, "script-src")
         assert len(inlines) == 1
         assert inlines[0].content == "alert(1);"
         assert inlines[0].line == 7
         assert inlines[0].position == 8
+        assert inlines[0].directive == "script-src"
 
     def test_parse_only_style_targets(self):
         doc = """
@@ -207,11 +208,12 @@ class TestParse:
         <body onclick="alert(1);">Some body</body>
         </html>
         """
-        inlines = parse(doc, "styles")
+        inlines = parse(doc, "style-src")
         assert len(inlines) == 1
         assert inlines[0].content == ".someclass { background:#142a3f; }"
         assert inlines[0].line == 5
         assert inlines[0].position == 10
+        assert inlines[0].directive == "style-src"
 
 
 def test_version():
