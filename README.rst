@@ -61,7 +61,7 @@ Here is an example of the output:
 
 .. code::
 
-    $inlinehashes https://ovalerio.net -a sha384
+    $inlinehashes https://ovalerio.net -a sha384 -o json
     [
       {
         "content": "\n      html {\n        height: 100%;\n      }\n      ",
