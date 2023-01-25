@@ -107,13 +107,11 @@ def run_cli() -> None:
 
     inlines = inlinehashes.parse(content, target)
     if output_format == "json":
-        out = build_json_output(inlines, args.alg)
+        console.print(build_json_output(inlines, args.alg))
     elif output_format == "plain":
-        out = build_plain_output(inlines, args.alg)
+        console.print(build_plain_output(inlines, args.alg))
     else:
-        out = build_table_output(inlines, args.alg)
-
-    console.print(out)
+        console.print(build_table_output(inlines, args.alg))
 
 
 if __name__ == "__main__":
