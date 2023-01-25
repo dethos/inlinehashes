@@ -10,17 +10,19 @@ from typing import List
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
+from rich import box
+from rich.console import Console
+from rich.syntax import Syntax
+from rich.table import Table
+
 import inlinehashes
 
 
-def build_output(
-    inlines: List[inlinehashes.lib.Inline], alg: str, full: bool = False
-) -> str:
+def build_json_output(inlines: List[inlinehashes.lib.Inline], alg: str) -> Syntax:
     """Build a JSON output from a list of Inline objects."""
-    snippet = "content" if full else "short_content"
     out = [
         {
-            "content": getattr(i, snippet),
+            "content": i.short_content,
             "hash": getattr(i, alg),
             "directive": i.directive,
             "line": i.line,
@@ -28,7 +30,32 @@ def build_output(
         }
         for i in inlines
     ]
-    return json.dumps(out, indent=2)
+    return Syntax(json.dumps(out, indent=2), "JSON", theme="ansi_dark")
+
+
+def build_plain_output(inlines: List[inlinehashes.lib.Inline], alg: str) -> str:
+    """Build a simple output of an inline per line."""
+    return "\n".join(
+        [
+            f"[magenta]{i.directive}[/magenta] [cyan]{i.line}[/cyan] "
+            f"[green]{i.position}[/green] [default]{getattr(i, alg)}[/default]"
+            for i in inlines
+        ]
+    )
+
+
+def build_table_output(inlines: List[inlinehashes.lib.Inline], alg: str) -> Table:
+    """Build a table to output the inlines in a nicer way."""
+    table = Table(box=box.HORIZONTALS)
+    table.add_column("Directive", style="magenta")
+    table.add_column("Line", justify="right", style="cyan")
+    table.add_column("Position", justify="right", style="green")
+    table.add_column("Hash")
+
+    for i in inlines:
+        table.add_row(i.directive, str(i.line), str(i.position), getattr(i, alg))
+
+    return table
 
 
 def run_cli() -> None:
@@ -43,21 +70,24 @@ def run_cli() -> None:
         choices=["sha256", "sha384", "sha512"],
     )
     parser.add_argument(
-        "-f",
-        "--full",
-        help="Include full content in the output",
-        action="store_true",
+        "-o",
+        "--output",
+        help="Format used to write the output (default: table)",
+        default="table",
+        choices=["table", "json", "plain"],
     )
     parser.add_argument(
         "-t",
         "--target",
-        help="Target inline content to look for",
+        help="Target inline content to look for (default: all)",
         default="all",
         choices=["all", "script-src", "style-src"],
     )
     args = parser.parse_args()
     path = args.source
     target = args.target
+    output_format = args.output
+    console = Console()
 
     try:
         if path.startswith("http://") or path.startswith("https://"):
@@ -71,13 +101,19 @@ def run_cli() -> None:
             with open(path, "r") as f:
                 content = f.read()
     except (URLError, OSError) as error:
-        print(error)
-        print(f"Failed to get source: {path}")
+        console.print(error)
+        console.print(f"Failed to get source: {path}")
         exit(1)
 
     inlines = inlinehashes.parse(content, target)
-    out = build_output(inlines, args.alg, bool(args.full))
-    print(out)
+    if output_format == "json":
+        out = build_json_output(inlines, args.alg)
+    elif output_format == "plain":
+        out = build_plain_output(inlines, args.alg)
+    else:
+        out = build_table_output(inlines, args.alg)
+
+    console.print(out)
 
 
 if __name__ == "__main__":

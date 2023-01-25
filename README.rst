@@ -43,18 +43,19 @@ This is the available functionality:
 
 .. code::
 
-    usage: inlinehashes [-h] [-a {sha256,sha384,sha512}] [-f] [-t {all,scripts,styles}] source
+  usage: inlinehashes [-h] [-a {sha256,sha384,sha512}] [-o {table,json,plain}] [-t {all,script-src,style-src}] source
 
-    positional arguments:
+  positional arguments:
     source                URL or local HTML file to check
 
-    optional arguments:
+  options:
     -h, --help            show this help message and exit
     -a {sha256,sha384,sha512}, --alg {sha256,sha384,sha512}
-                            Hash algorithm to use (default: sha256)
-    -f, --full            Include full content in the output
-    -t {all,scripts,styles}, --target {all,scripts,styles}
-                            Target inline content to look for
+                          Hash algorithm to use (default: sha256)
+    -o {table,json,plain}, --output {table,json,plain}
+                          Format used to write the output (default: table)
+    -t {all,script-src,style-src}, --target {all,script-src,style-src}
+                          Target inline content to look for (default: all)
 
 Here is an example of the output:
 
